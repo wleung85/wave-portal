@@ -7,14 +7,33 @@ contract WavePortal {
   uint256 totalWaves;
   mapping (address => uint256) private addrWaveCount;
 
+  event NewWave(address indexed from, uint256 timestamp, string message);
+
+  struct Wave {
+    address waver;
+    string message;
+    uint256 timestamp;
+  }
+
+  Wave[] waves;
+
   constructor() {
     console.log("Smart contract successfully deployed!");
   }
 
-  function wave() public {
+  function wave(string memory _message) public {
     totalWaves += 1;
     addrWaveCount[msg.sender] += 1;
     console.log("%s has waved!", msg.sender);
+
+    /* Store wave in array */
+    waves.push(Wave(msg.sender, _message, block.timestamp));
+
+    emit NewWave(msg.sender, block.timestamp, _message);
+  }
+
+  function getAllWaves() public view returns (Wave[] memory) {
+    return waves;
   }
 
   function getTotalWaves() public view returns (uint256) {

@@ -7,25 +7,27 @@ const main = async () => {
   console.log("Contract deployed to:", waveContract.address);
   console.log("Contract deployed by:", owner.address);
 
+  /* We don't need to call waveCount.wait() because getTotalWaves() is a view,
+   * i.e. does not affect anything in the blockchain and is read-only */
   let waveCount = await waveContract.getTotalWaves();
+  console.log(waveCount.toNumber());
 
-  let waveTxn = await waveContract.wave();
+  /* Sending waves */
+  let waveTxn = await waveContract.wave('A message!');
+  await waveTxn.wait(); // wait for transaction to be mined
+
+  waveTxn = await waveContract.connect(randomPerson).wave("Another message!");
   await waveTxn.wait();
 
   waveCount = await waveContract.getTotalWaves();
-
-  waveTxn = await waveContract.connect(randomPerson).wave();
-  await waveTxn.wait();
-
-  waveCount = await waveContract.getTotalWaves();
-
-  waveTxn = await waveContract.wave();
-  await waveTxn.wait();
-  waveTxn = await waveContract.wave();
-  await waveTxn.wait();
+  console.log("Total number of waves: %d", waveCount);
 
   // Get how many times owner has waved
-  await waveContract.getAddrWaveCount();
+  let userWaveCount = await waveContract.getAddrWaveCount();
+  console.log("Total number of waves from %d: %d", owner, userWaveCount);
+
+  let allWaves = await waveContract.getAllWaves();
+  console.log(allWaves);
 
 };
 
