@@ -25,11 +25,11 @@ const main = async () => {
   console.log(waveCount.toNumber()); 
 
   /* Sending waves */
-  let waveTxn = await waveContract.wave('A message!');
-  await waveTxn.wait(); // wait for transaction to be mined
+  let waveTxn1 = await waveContract.wave('A message!');
+  await waveTxn1.wait(); // wait for transaction to be mined
 
-  waveTxn = await waveContract.connect(randomPerson).wave("Another message!");
-  await waveTxn.wait();
+  let waveTxn2 = await waveContract.connect(randomPerson).wave("Another message!");
+  await waveTxn2.wait();
 
   waveCount = await waveContract.getTotalWaves();
   console.log("Total number of waves: %d", waveCount);
