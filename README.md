@@ -1,18 +1,8 @@
-# Basic Sample Hardhat Project
+# Wave Portal
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+This project creates a contract that allows users to wave and post messages.
+The objective is to have the most waves. Whoever reaches #1 gets an ETH payout!
+Deployed on the Rinkeby network so no real ETH is used.
 
 To deploy contract on Rinkeby:
 npx hardhat run --network rinkeby scripts/deploy.js
