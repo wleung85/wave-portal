@@ -17,6 +17,11 @@ contract WavePortal {
     uint256 timestamp;
   }
 
+  struct TopWaver {
+    address waver;
+    uint256 count;
+  }
+
   Wave[] waves;
 
   /* Tracks top 3 wavers */
@@ -106,7 +111,11 @@ contract WavePortal {
     return addrWaveCount[msg.sender];
   }
 
-  function getTopWavers() public view returns (address[3] memory) {
-    return topWavers;
+  function getTopWavers() public view returns (TopWaver[3] memory) {
+    TopWaver[3] memory topWaversSummary;
+    for (uint i = 0; i < 3; i += 1) {
+      topWaversSummary[i] = TopWaver(topWavers[i], addrWaveCount[topWavers[i]]);
+    }
+    return topWaversSummary;
   }
 }
