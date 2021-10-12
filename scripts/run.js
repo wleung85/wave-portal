@@ -49,6 +49,9 @@ const main = async () => {
   let allWaves = await waveContract.getAllWaves();
   console.log(allWaves);
 
+  let topWavers = await waveContract.getTopWavers();
+  console.log(topWavers);
+
 };
 
 const runMain = async () => {

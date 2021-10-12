@@ -19,25 +19,56 @@ contract WavePortal {
 
   Wave[] waves;
 
+  /* Tracks top 3 wavers */
+  address[3] topWavers;
+
   constructor() payable {
     console.log("Smart contract successfully deployed!");
   }
 
   function wave(string memory _message) public {
     require(
-      lastWavedAt[msg.sender] + 15 minutes < block.timestamp,
-      "Wait 15m"
+      lastWavedAt[msg.sender] + 30 seconds < block.timestamp,
+      "Wait 30s"
     );
+
+    uint256 userNumWaves;
 
     /* Update the current timestamp we have for the user */
     lastWavedAt[msg.sender] = block.timestamp;
 
     totalWaves += 1;
     addrWaveCount[msg.sender] += 1;
+    userNumWaves = addrWaveCount[msg.sender];
     console.log("%s has waved!", msg.sender);
 
     /* Store wave in array */
     waves.push(Wave(msg.sender, _message, block.timestamp));
+
+    /* Add to waverScores if needed */
+    if (userNumWaves >= addrWaveCount[topWavers[0]]) {
+      // replace 1st place if not already 1st place
+      if (topWavers[0] != msg.sender) {
+        if (topWavers[1] != msg.sender) {
+          topWavers[2] = topWavers[1];
+        }
+        topWavers[1] = topWavers[0];
+        topWavers[0] = msg.sender;
+      }
+
+    } else if (userNumWaves >= addrWaveCount[topWavers[1]]) {
+      // replace 2nd place if not already 2nd place
+      if (topWavers[1] != msg.sender) {
+        topWavers[2] = topWavers[1];
+        topWavers[1] = msg.sender;
+      }
+
+    } else if (userNumWaves >= addrWaveCount[topWavers[2]]) {
+      // replace 3rd place if not already 3rd place
+      if (topWavers[2] != msg.sender) {
+        topWavers[2] = msg.sender;
+      }
+    }
 
     /* Generate a pseudo random number between 0 and 100 */
     uint256 randomNumber = (block.difficulty + block.timestamp + seed) % 100;
@@ -73,5 +104,9 @@ contract WavePortal {
   function getAddrWaveCount() public view returns (uint256) {
     console.log("%s has waved %s times!", msg.sender, addrWaveCount[msg.sender]);
     return addrWaveCount[msg.sender];
+  }
+
+  function getTopWavers() public view returns (address[3] memory) {
+    return topWavers;
   }
 }

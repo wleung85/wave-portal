@@ -9,6 +9,7 @@ const main = async () => {
   const portal = await Token.deploy({
     value: hre.ethers.utils.parseEther('0.001'),
   });
+  await portal.deployed();
 
   console.log('WavePortal address: ', portal.address);
 };

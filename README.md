@@ -13,3 +13,6 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+To deploy contract on Rinkeby:
+npx hardhat run --network rinkeby scripts/deploy.js
