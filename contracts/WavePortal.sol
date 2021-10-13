@@ -33,10 +33,10 @@ contract WavePortal {
   }
 
   function wave(string memory _message) public {
-    require(
-      lastWavedAt[msg.sender] + 30 seconds < block.timestamp,
-      "Wait 30s"
-    );
+    // require(
+    //   lastWavedAt[msg.sender] + 30 seconds < block.timestamp,
+    //   "Wait 30s"
+    // );
 
     uint256 userNumWaves;
 
@@ -60,6 +60,19 @@ contract WavePortal {
         }
         topWavers[1] = topWavers[0];
         topWavers[0] = msg.sender;
+      }
+
+      // Same user can only win once every hour
+      if (lastWonAt[msg.sender] + 60 minutes < block.timestamp) {
+        console.log("Paying out ETH to %s", msg.sender);
+        uint256 prizeAmount = 0.0001 ether;
+        require(
+          prizeAmount <= address(this).balance,
+          "Trying to withdraw more than the contract has."
+        );
+        (bool success, ) = (msg.sender).call{value: prizeAmount}("");
+        require(success, "Failed to withdraw money from contract.");
+        lastWonAt[msg.sender] = block.timestamp;
       }
 
     } else if (userNumWaves >= addrWaveCount[topWavers[1]]) {
@@ -97,21 +110,6 @@ contract WavePortal {
 
     emit NewWave(msg.sender, block.timestamp, _message);
 
-    if (topWavers[0] == msg.sender) {
-      require(
-        lastWonAt[msg.sender] + 60 minutes < block.timestamp,
-        "Same user can only win once every 60 minutes."
-      );
-
-      uint256 prizeAmount = 0.0001 ether;
-      require(
-        prizeAmount <= address(this).balance,
-        "Trying to withdraw more than the contract has."
-      );
-      (bool success, ) = (msg.sender).call{value: prizeAmount}("");
-      require(success, "Failed to withdraw money from contract.");
-      lastWonAt[msg.sender] = block.timestamp;
-    }
   }
 
   function getAllWaves() public view returns (Wave[] memory) {
