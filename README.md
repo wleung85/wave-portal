@@ -11,3 +11,6 @@ To deploy contract on Rinkeby:
 `npx hardhat run --network rinkeby scripts/deploy.js`
 
 Project created with buildspace.
+
+What the app looks like with the frontend (https://github.com/wleung85/wave-portal-front):
+![App preview](./img/preview.PNG)
