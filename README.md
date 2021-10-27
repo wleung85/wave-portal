@@ -12,5 +12,7 @@ To deploy contract on Rinkeby:
 
 Project created with buildspace.
 
+[Link to live demo](https://waveportal-baseline-student.wleung85.repl.co)
+
 What the app looks like with the frontend (https://github.com/wleung85/wave-portal-front):
 ![App preview](./img/preview.PNG)
